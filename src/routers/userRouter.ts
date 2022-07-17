@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { signUp, signIn } from "../controllers/userController.js";
-import { signUpValidation } from "../middlewares/schemasValidation.js";
+import { userValidation } from "../middlewares/schemasValidation.js";
 
 const userRouter = Router();
 
-userRouter.post("/sign-up", signUpValidation, signUp);
-userRouter.post("/sign-in", signIn);
+userRouter.post("/sign-up", userValidation, signUp);
+userRouter.post("/sign-in", userValidation, signIn);
 
 export default userRouter;
