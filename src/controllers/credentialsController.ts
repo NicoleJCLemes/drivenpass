@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Credential } from "../repositories/credentialsRepository.js";
-import { createCredentialService, showCredentialService } from "../services/credentialsService.js";
+import { createCredentialService, showCredentialService, deleteCredentialService } from "../services/credentialsService.js";
 
 export async function createCredential(req: Request, res: Response) {
     const body: Credential = req.body;
@@ -20,3 +20,11 @@ export async function showCredentials(req: Request, res: Response) {
     res.status(200).send(credentials);
 }
 
+export async function deleteCredential(req: Request, res: Response) {
+    const { id } = req.params;
+    const {authorization} = req.headers;
+
+    await deleteCredentialService(Number(id), authorization);
+
+    res.sendStatus(200);
+}

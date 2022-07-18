@@ -1,9 +1,10 @@
 import { 
     Credential, 
-    getById,
+    getByCredencialId,
     getByUserId,
     getByIdAndTitle, 
-    insert } from "../repositories/credentialsRepository.js";
+    insert,
+    deleteById } from "../repositories/credentialsRepository.js";
 import jwt from "jsonwebtoken";
 import Cryptr from "cryptr";
 import "../config/setup.js"
@@ -45,7 +46,7 @@ export async function showCredentialService(id: number, authorization: string) {
     })
     
     if(id) {
-        let credential = await getById(userId, id);
+        let credential = await getByCredencialId(userId, id);
         if(!credential) {
             throw {
                 type: "Not Found",
@@ -57,4 +58,19 @@ export async function showCredentialService(id: number, authorization: string) {
     }
 
     return userCredentialsArray;
+}
+
+export async function deleteCredentialService(id: number, authorization: string) {
+    const token = authorization.replace("Bearer", "").trim();
+    const userId = jwt.verify(token, process.env.SECRET_KEY);
+
+    const credentialById = await getByCredencialId(userId, id);
+    if(credentialById) {
+        await deleteById(id);
+    } else {
+        throw {
+            type: "Not Found",
+            message: "This credencial is inexistent or invalid"
+        }
+    }
 }

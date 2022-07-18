@@ -22,7 +22,7 @@ export async function insert(credentials, userId) {
     });
 }
 
-export async function getById(userId, id: number) {
+export async function getByCredencialId(userId, id: number) {
     const credential = await prisma.credentials.findFirst({
         where: {
             id,
@@ -39,4 +39,12 @@ export async function getByUserId(userId) {
         }
     });
     return allCredentials;
+}
+
+export async function deleteById(id: number) {
+    const credential = await prisma.credentials.delete({
+        where: {
+            id
+        }
+    });
 }
