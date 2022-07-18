@@ -1,5 +1,5 @@
 import { Card } from "../repositories/cardsRepository.js";
-import { getByIdAndTitle, insert, getByCardId, getByUserId } from "../repositories/cardsRepository.js";
+import { getByIdAndTitle, insert, getByCardId, getByUserId, deleteById } from "../repositories/cardsRepository.js";
 import jwt from "jsonwebtoken";
 import Cryptr from "cryptr";
 import dayjs from "dayjs";
@@ -73,4 +73,19 @@ export async function showCardService(id: number, authorization: string) {
     }
 
     return userCardsArray;
+}
+
+export async function deleteCardService(id: number, authorization: string) {
+    const token = authorization.replace("Bearer", "").trim();
+    const userId = jwt.verify(token, process.env.SECRET_KEY);
+
+    const cardById = await getByCardId(userId, id);
+    if(cardById) {
+        await deleteById(id);
+    } else {
+        throw {
+            type: "Not Found",
+            message: "This card is inexistent or invalid"
+        }
+    }
 }

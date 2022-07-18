@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Card } from "../repositories/cardsRepository.js";
-import { createCardService, showCardService } from "../services/cardsService.js";
+import { createCardService, showCardService, deleteCardService } from "../services/cardsService.js";
 
 export async function createCard(req: Request, res: Response) {
     const body: Card = req.body;
@@ -21,5 +21,10 @@ export async function showCards(req: Request, res: Response) {
 }
 
 export async function deleteCard(req: Request, res: Response) {
-    
+    const { id } = req.params;
+    const {authorization} = req.headers;
+
+    await deleteCardService(Number(id), authorization);
+
+    res.sendStatus(200);
 }
