@@ -1,4 +1,9 @@
-import { Credential, getByIdAndTitle, insert } from "../repositories/credentialsRepository.js";
+import { 
+    Credential, 
+    getById,
+    getByUserId,
+    getByIdAndTitle, 
+    insert } from "../repositories/credentialsRepository.js";
 import jwt from "jsonwebtoken";
 import Cryptr from "cryptr";
 import "../config/setup.js"
@@ -8,7 +13,7 @@ export async function createCredentialService(body: Credential, authorization: s
     const token = authorization.replace("Bearer", "").trim();
     const userId = jwt.verify(token, process.env.SECRET_KEY);
     const titleExists = await getByIdAndTitle(userId, body.title);
-    
+
     if(titleExists) {
         throw {
             type: "Conflict",
@@ -24,5 +29,32 @@ export async function createCredentialService(body: Credential, authorization: s
         password: cryptr.encrypt(body.password)
     }
 
-    await insert(credential, userId); // erro com o jwt, não encontra o id que está dentro
+    await insert(credential, userId);
+}
+
+export async function showCredentialService(id: number, authorization: string) {
+    const token = authorization.replace("Bearer", "").trim();
+    const userId = jwt.verify(token, process.env.SECRET_KEY);
+    
+    const credentialsByUserId = await getByUserId(userId);
+    const cryptr = new Cryptr(process.env.SECRET_KEY);
+    let userCredentialsArray = []
+    credentialsByUserId.forEach((credential) => {
+        let userCredentials = {...credential, password: cryptr.decrypt(credential.password)}
+        userCredentialsArray = [...userCredentialsArray, userCredentials]
+    })
+    
+    if(id) {
+        let credential = await getById(userId, id);
+        if(!credential) {
+            throw {
+                type: "Not Found",
+                message: "This credencial is inexistent or invalid"
+            }
+        }
+        const decryptedPassword = cryptr.decrypt(credential.password);
+        return {...credential, password: decryptedPassword}
+    }
+
+    return userCredentialsArray;
 }

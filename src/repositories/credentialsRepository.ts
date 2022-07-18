@@ -2,7 +2,6 @@ import { Credentials } from "@prisma/client";
 import prisma from "../config/database.js";
 
 export type Credential = Partial<Credentials>;
-export type CredentialWithNoId = Omit<Credentials, "id">
 
 export async function getByIdAndTitle(userId, title: string) {
     
@@ -21,4 +20,23 @@ export async function insert(credentials, userId) {
     await prisma.credentials.create({
         data: credential
     });
+}
+
+export async function getById(userId, id: number) {
+    const credential = await prisma.credentials.findFirst({
+        where: {
+            id,
+            userId: parseInt(userId.id)
+        }
+    });
+    return credential;
+}
+
+export async function getByUserId(userId) {
+    const allCredentials = await prisma.credentials.findMany({
+        where: {
+            userId: parseInt(userId.id)
+        }
+    });
+    return allCredentials;
 }
