@@ -15,7 +15,7 @@ $ npm run dev
 - POST /sign-up
     - Rota para o usuário criar uma conta
     - body: {
-        "email": "email@gmail.com",
+        "email": "",
         "password": "" (10 caracteres)
     }
 
