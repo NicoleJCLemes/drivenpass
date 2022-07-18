@@ -44,7 +44,7 @@ model Cards {
   cardNumber String
   cardName String
   securityCode String
-  expirationDate DateTime
+  expirationDate Int
   password String
   isVirtual Boolean
   type CardTypes
