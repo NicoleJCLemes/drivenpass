@@ -7,7 +7,7 @@ import {
     deleteById } from "../repositories/credentialsRepository.js";
 import jwt from "jsonwebtoken";
 import Cryptr from "cryptr";
-import "../config/setup.js"
+import "../config/setup.js";
 
 export async function createCredentialService(body: Credential, authorization: string) {
     

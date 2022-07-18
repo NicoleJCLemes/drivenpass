@@ -1,10 +1,12 @@
 import { Router } from "express";
+import { createNote, deleteNote, showNotes } from "../controllers/safeNotesController.js";
 import { authValidation } from "../middlewares/authValidation.js";
+import { noteValidation } from "../middlewares/schemasValidation.js";
 
 const safeNotesRouter = Router();
 
-safeNotesRouter.post("/credentials", authValidation);
-safeNotesRouter.get("/credentials", authValidation);
-safeNotesRouter.delete("/credentials", authValidation)
+safeNotesRouter.post("/safe-notes", authValidation, noteValidation, createNote);
+safeNotesRouter.get("/safe-notes", authValidation, showNotes);
+safeNotesRouter.delete("/safe-notes/:id", authValidation, deleteNote)
 
 export default safeNotesRouter;

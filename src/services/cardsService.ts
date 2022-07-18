@@ -3,6 +3,7 @@ import { getByIdAndTitle, insert, getByCardId, getByUserId, deleteById } from ".
 import jwt from "jsonwebtoken";
 import Cryptr from "cryptr";
 import dayjs from "dayjs";
+import "../config/setup.js";
 
 export async function createCardService(body: Card, authorization: string) {
     
