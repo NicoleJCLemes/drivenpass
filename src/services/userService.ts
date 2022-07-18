@@ -39,9 +39,7 @@ export async function userLoginService(body: User) {
         }
     }
 
-    const payload = {
-        id: emailExists.id.toString()
-    };
+    const payload = { id: emailExists.id.toString() };
 
     const token = jwt.sign(payload, process.env.SECRET_KEY);
 

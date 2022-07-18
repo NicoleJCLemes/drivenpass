@@ -5,8 +5,8 @@ export function authValidation(req: Request, res: Response, next: NextFunction) 
     if(!authorization) {
         throw {
             type: "Unauthorized",
-            message: "Token not found or invalid"
+            message: "Token not found or inexistent"
         }
     }
-
+    next();
 }
